@@ -1,0 +1,13 @@
+public class SwapInt {
+
+    public static void Swap(int a, int b){
+        int temp=a;
+        a=b;
+        b=temp;
+    }
+    public static void main(String[] args) {
+
+    }
+
+    
+}
