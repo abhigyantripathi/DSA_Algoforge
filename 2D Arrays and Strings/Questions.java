@@ -43,8 +43,67 @@ public class Questions {
 
     }
 
-    public static void main(String[] args) {
+    public static int[][] multiplyMatrices(int[][] a, int[][] b){
+        int r1=a.length;
+        int c1= a[0].length;
+
+        int r2=b.length;
+        int c2=b[0].length;
+
+        if(c1!=r2){
+            System.out.println("mul no possible");
+        }
+
+        int[][] res= new int[r1][c2];
+
+        for(int i=0;i<res.length;i++){
+            for(int j=0;j<res[0].length;j++){
+                int currAns=0;
+                for(int k=0;k<c1;k++){
+                    currAns= a[i][k] * b[k][j];
+                    res[i][j]= currAns;
+                }
+            }
+        }
+        return res;
+    }
+
+    //Search in a Row-Column Sorted
+
+    public static boolean matSearch(int mat[][], int x) {
+        // code here
+        int m= mat.length;
+        int n= mat[0].length;
+
+        int row=0;
+        int col=m-1; 
+        //another starting point can be 0,n-1:
+
+        while(row<n && col >=0){
+            if(mat[row][col]==x){
+                return true;
+            }
+            else if(mat[row][col]<target){
+                row++;
+            }
+            else{
+                col--;
+            }
+        }
+
+        return false;
+
         
+    }
+
+
+
+    public static void main(String[] args) {
+        int[][] a= new int[4][3];
+        int[][] b= new int[3][2];
+
+        int[][] res= multiplyMatrices(a,b);
+
     }
     
 }
