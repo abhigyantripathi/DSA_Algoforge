@@ -1,6 +1,25 @@
 import java.util.*;
 public class Main {
 
+
+    public static int findFirstIndex(int[] arr, int target, int idx){
+        if(idx==arr.length) return -1;
+        int furtherLastIndex= findFirstIndex(arr, target, idx+1);
+        if(furtherLastIndex==-1 && arr[idx]==target){
+            return idx;
+        }
+        return furtherLastIndex;
+    }
+
+    public static int findFirstIndex(int[] arr, int target, int idx){
+        if(idx==arr.length) return -1;
+        if(arr[idx]==target){
+            return idx;
+        }
+        int furtherFirstIndex= findFirstIndex(arr, target, idx+1);
+        return furtherFirstIndex;
+    }
+
     public static ArrayList<String> getKeypadCombinantions(){
         
     }
