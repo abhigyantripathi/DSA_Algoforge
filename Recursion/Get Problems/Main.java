@@ -2,9 +2,31 @@ import java.util.*;
 public class Main {
 
 
-    public static int findFirstIndex(int[] arr, int target, int idx){
+    public static int[] findAllIndices(int[] arr, int target, int idx, int fsf //foundsofar){
+        if(idx=arr.length){
+            int[] baseArray= new int[fsf];
+            return baseArray;
+        }
+        int[] arr;
+        if(arr[idx]==target){
+            ans= findAllIndices(arr, target, idx+1, fsf+1);
+        }
+        else{
+            ans= findAllIndices(arr, target, idx+1, fsf);
+        }
+
+
+        if(arr[idx]==target){
+            ans[fsf]=idx;
+        }
+        return ans;
+
+    }
+
+
+    public static int findLastIndex(int[] arr, int target, int idx){
         if(idx==arr.length) return -1;
-        int furtherLastIndex= findFirstIndex(arr, target, idx+1);
+        int furtherLastIndex= findLastIndex(arr, target, idx+1);
         if(furtherLastIndex==-1 && arr[idx]==target){
             return idx;
         }
