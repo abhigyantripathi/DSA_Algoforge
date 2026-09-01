@@ -1,4 +1,5 @@
 package Backtracking.Intro;
+import java.util.*;
 
 public class main {
     public static void floodFill(int row, int col, int n, int m, int[][] matrix, boolean[][] visited, String psf){
@@ -33,63 +34,215 @@ public class main {
             }
         }
     }
-    public static boolean isPossibleToPlaceHere(int row, int col, boolean[][] vis) {
-        int n=vis.length;
-        int[][] dirs={{-1,-1},{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1}};
-        for(int radius=1 ; radius<n ; radius++){
-            for(int[] dir: dirs){
-            int nRow= row+ radius * dir[0];
-            int nCol= col+ radius * dir[1];
-            if(nRow>=0 && nCol>=0 && nRow<n && nCol<n && (vis[nRow][nCol]==true)){
-                return false;
+     // Leetcode 51 =========================================
+    class Solution {
+        public boolean isPossibleToPlaceHere(int row, int col, boolean[][] vis){
+            int n = vis.length;
+
+            int[][] dirs = {{-1,-1},{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1}};
+            // {-1,-1},{-1,0},{-1,1} only these directions are required
+
+            for(int rad=1; rad<n; rad++){
+                for(int[] dir: dirs){
+                    int nRow = row + rad*dir[0];
+                    int nCol = col + rad*dir[1];
+
+                    if(nRow >=0 && nCol >=0 && nRow < n && nCol < n && vis[nRow][nCol] == true){
+                        return false;
+                    }
+                }
             }
 
-            }
-
-
+            return true;
         }
 
-        return true;
+        public void convertBooleanVisitedToList(boolean[][] vis, List<List<String>> ans){
+            List<String> currentAns = new ArrayList<>();
+
+            for(int i=0; i<vis.length; i++){
+
+                String currentRow = "";
+                for(int j=0; j<vis.length; j++){
+                    if(vis[i][j] == true){
+                        currentRow += "Q";
+                    } else {
+                        currentRow += ".";
+                    }
+                }
+
+                currentAns.add(currentRow);
+            }
+
+            ans.add(currentAns);
+        }
+
+        public void NQueens(int row, int n, boolean[][] vis,List<List<String>> ans){
+            if(row == n){
+                convertBooleanVisitedToList(vis,ans);
+                return;
+            }
+
+            for(int col=0; col<n; col++){
+                if(isPossibleToPlaceHere(row,col,vis) == true){
+                    vis[row][col] = true;
+
+                    NQueens(row + 1, n, vis, ans);
+
+                    vis[row][col] = false;
+                }
+            }
+        }
+
+        public List<List<String>> solveNQueens(int n) {
+            List<List<String>> ans = new ArrayList<>();
+            boolean[][] vis = new boolean[n][n];
+
+            NQueens(0,n,vis,ans);    
+
+            return ans;
+        }
+    }
+
+
+    // knight Tour
+    public static void printKnightTour(int sr, int sc){
+@@ -205,15 +274,132 @@ public static void nQueensOptimized(int row,boolean[] colVis, boolean[]diagVis,
+        }
+    }
+
+    // Leetcode 52 ========================
+    public static void printAllSolutions(int n) {
+        boolean[] colVis = new boolean[n];
+        boolean[] diagVis = new boolean[2*n-1];
+        boolean[] aDiagVis = new boolean[2*n-1];
+
+        nQueensOptimized(0,colVis,diagVis,aDiagVis,"",n);
+        nQueensOptimized(0,colVis,diagVis,aDiagVis,"",n);        
+    }
+
+
+    // Leetcode 52 =====================================
+    class Solution {
+        int ans=0;
+        public void nQueensOptimized(int row,boolean[] colVis, boolean[]diagVis, boolean[] aDiagVis, int n){
+            if(row == n){
+                ans++;
+                return;
+            }
+
+            for(int col = 0; col < n; col++){
+                if(colVis[col] == false && diagVis[col-row+n-1]==false && aDiagVis[row+col] == false){
+                    colVis[col] = true;
+                    diagVis[col-row+n-1] = true;
+                    aDiagVis[row+col] = true;
+
+                    nQueensOptimized(row+1,colVis,diagVis,aDiagVis,n);
+
+                    colVis[col] = false;
+                    diagVis[col-row+n-1] = false;
+                    aDiagVis[row+col] = false;
+                }
+            }
+        }
+
+        public int totalNQueens(int n) {
+            ans = 0;
+            boolean[] colVis = new boolean[n];
+            boolean[] diagVis = new boolean[2*n-1];
+            boolean[] aDiagVis = new boolean[2*n-1];
+
+            nQueensOptimized(0,colVis,diagVis,aDiagVis,n);
+
+            return ans;
+        }
+    }
+
+    class Solution {
+        public int nQueensOptimized(int row,boolean[] colVis, boolean[]diagVis, boolean[] aDiagVis, int n){
+            if(row == n){
+                return 1;
+            }
+
+            int ans = 0;
+            for(int col = 0; col < n; col++){
+                if(colVis[col] == false && diagVis[col-row+n-1]==false && aDiagVis[row+col] == false){
+                    colVis[col] = true;
+                    diagVis[col-row+n-1] = true;
+                    aDiagVis[row+col] = true;
+
+                    ans += nQueensOptimized(row+1,colVis,diagVis,aDiagVis,n);
+
+                    colVis[col] = false;
+                    diagVis[col-row+n-1] = false;
+                    aDiagVis[row+col] = false;
+                }
+            }
+            return ans;
+        }
+
+        public int totalNQueens(int n) {
+            boolean[] colVis = new boolean[n];
+            boolean[] diagVis = new boolean[2*n-1];
+            boolean[] aDiagVis = new boolean[2*n-1];
+
+            return nQueensOptimized(0,colVis,diagVis,aDiagVis,n);
+        }
+    }
+
+    // N-Queens Most optimized => O(1 + rec) space, canPlaceHere => O(1) time ==============================
+    public int setKthBit(int num, int k){
+        int mask = (1 << k);
+        int newNum = num | mask;
+
+        return newNum;   
+    }
+
+    public int unsetKthBit(int num, int k){
+        int mask = ~(1 << k);
+        int newNum = num & mask;
+
+        return newNum;
+    }
+
+    public boolean ifKthBitIsOn(int num, int k){
+        int mask = (1 << k);
+
+        int res = num & mask;
+        return res > 0;
+    }
+
+    public int nQueensMostOptimized(int row, int colVis, int diagVis, int aDiagVis, int n){
         
-    }
-
-    public static void NQueens(int row, int n, boolean[][] vis) {
-        if(row==n){
-            printVisitedMatrix(vis);
-            return;
+        if(row == n){
+            return 1;
         }
 
+        int ans = 0;
+        for(int col=0; col<n; col++){
+            if(ifKthBitIsOn(colVis,col) == false && !ifKthBitIsOn(diagVis,col-row+n-1) && !((aDiagVis & (1 << col + row)) > 0)){
+                // visited mark
+                colVis = setKthBit(colVis,col);
+                diagVis = setKthBit(diagVis,col-row+n-1);
+                aDiagVis = aDiagVis | (1 << (row+col));
 
+                ans += nQueensMostOptimized(row+1,colVis,diagVis,aDiagVis,n);
 
-        for(int col=0;col<n;col++){
-            if(isPossibleToPlaceHere(row,col,vis)==true){
-                vis[row][col]=true;
+                // unmark
+                colVis = unsetKthBit(colVis,col);
+                diagVis = diagVis & ~(1 << (col-row+n-1));
+                aDiagVis = aDiagVis & ~(1 << (col + row));
             }
-            NQueens(row+1, n, vis);
-
-
-            vis[row][col]=false;
         }
-        
+
+        return ans;
     }
 
 
+    public int totalNQueens(int n) {
+        int colVis = 0;
+        int diagVis = 0;
+        int aDiagVis = 0;
 
-
-    public static void main(String[] args){
-       /*
-        int[][] matrix = {{0,0,0,1,0},{0,1,0,1,0},{0,0,0,0,0},{0,1,0,1,0},{0,1,0,1,0},{0,0,0,1,0}};
-        int n=matrix.length;
-        int m=matrix[0].length;
-        boolean[][] visited= new boolean[][];
-        floodFill(0, 0, n, m, matrix, visited, "");
-
-        */
-       
-       int n=4;
-       boolean[][] vis= new boolean[n][n];
-       NQueens(0,n,vis);
-
+        return nQueensMostOptimized(0,colVis,diagVis,aDiagVis,n);
     }
-    
 }
