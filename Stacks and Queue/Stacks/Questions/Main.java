@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 class Main {
     public static boolean isDuplicateBracket(String str){
@@ -604,7 +606,48 @@ class Solution {
 
 
 
+//LEETCODE 456-----132 pattern
+class Solution {
+    public int[] getMinSoFar(int[] nums){
+        int n = nums.length;
 
+        int[] minSoFar = new int[n];
+        minSoFar[0] = nums[0];
+
+        for(int i=1; i<n; i++){
+            minSoFar[i] = Math.min(nums[i], minSoFar[i-1]);
+        }
+
+        return minSoFar;
+    }
+
+    public boolean find132pattern(int[] nums) {
+        int n = nums.length;
+
+        int[] minSoFar = getMinSoFar(nums);
+
+        Stack<Integer> possibleKValues = new Stack<>();
+        possibleKValues.push(nums[n-1]);
+
+        for(int j=n-2; j>=1; j--){
+            int firstNum = minSoFar[j-1];
+            
+            // removing elements smaller than firstNum
+            while(possibleKValues.size() > 0 && possibleKValues.peek() <= firstNum){
+                possibleKValues.pop();
+            }
+
+            // possibleKValues.peek() is greater than first num and smaller than nums[j]
+            if(possibleKValues.size() > 0 && possibleKValues.peek() < nums[j]){
+                return true;
+            }
+
+            possibleKValues.push(nums[j]); // you can be k in next iteration
+        }
+
+        return false;
+    }
+}
 
 
 
