@@ -20,8 +20,7 @@ class Pair {
     }
 }
 
-class main {
-    
+class Main {
     public static Node buildTree(Integer[] arr){
         Stack<Pair> st = new Stack<>();
 
@@ -56,40 +55,32 @@ class main {
 
         return root;
     }
-    public static int size(Node root){
-        if(root==null){
-            return 0;
-        }
-        int totalSize=0;
-        totalSize+=size(root.left);
-        totalSize+=size(root.right);
-        return totalSize+1;
-        
-    }
-
-    public static int sum(Node root){
-        if(root==null){
-            return 0;
-        }
-        int totalSum=0;
-        totalSum+=sum(root.left);
-        totalSum+=sum(root.right);
-
-        return totalSum+root.data;
-    }
 
     public static void display(Node root){
         if(root == null){
             return;
         }
 
-        String current = (root.left==null ? "." : root.left.data) + "<-" + root.data + "->"
-        + (root.right==null ? "." : root.right.data);
+        String current = (root.left == null ? "." : root.left.data) + " <- " + root.data + " -> " 
+                            + (root.right == null ? "." : root.right.data);
 
         System.out.println(current);
-        
+
         display(root.left);
         display(root.right);
+    }
+
+    public static int size(Node root){
+        if(root == null){
+            return 0;
+        }
+        
+        int totalSize = 0;
+
+        totalSize += size(root.left);
+        totalSize += size(root.right);
+
+        return totalSize + 1;
     }
 
     public static void main(String[] args){
@@ -97,9 +88,5 @@ class main {
 
         Node root = buildTree(arr);
         display(root);
-        int size= size(root);
-        int sum=sum(root);
-        System.out.println(sum);
-        System.out.println(size);
     }
 }
